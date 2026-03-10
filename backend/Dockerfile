@@ -27,4 +27,4 @@ COPY --from=build /app/package*.json ./
 COPY --from=build /app/prisma ./prisma
 
 EXPOSE 3008
-CMD ["node", "dist/index.js"]
+CMD ["npm", "run", "start"]

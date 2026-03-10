@@ -24,7 +24,7 @@ services:
       - ./backend:/app          # Hot-reload mapping
       - /app/node_modules       # Anonymous volume for dependencies
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres@db:5432/movie_magic_db"
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/nomad_nodes_mern_db"
     depends_on:
       - db
 
