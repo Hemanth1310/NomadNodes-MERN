@@ -3,11 +3,11 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: monad-mern-db
+    container_name: nomad-mern-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: nomad-nodes-mern
+      POSTGRES_DB: nomad_nodes_mern_db
     ports:
       - "5433:5432"
     volumes:
