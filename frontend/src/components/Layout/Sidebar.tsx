@@ -6,10 +6,10 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="p-5 min-h-screen absolute left-0 top-0 bg-gray-200 flex flex-col items-center gap-10">
-      <MapPinned size={36} color="#ff6a00" onClick={() => navigate("/")} />
-      <ImageUp size={36} color="#353131" onClick={() => navigate("/upload")} />
-      <Settings size={116} color="#ffffff" />
+    <div className="w-full md:w-24  p-3 md:pt-10 h-24 md:min-h-screen absolute left-0 top-0 bg-gray-200 flex md:flex-col items-center gap-10 z-10 ">
+      <MapPinned className="p-3 rounded-2xl hover:bg-mist-100" size={58} color="#ff6a00" onClick={() => navigate("/")} />
+      <ImageUp className="p-3 rounded-2xl hover:bg-mist-100" size={58} color="#353131" onClick={() => navigate("/upload")} />
+      <Settings className="p-3 rounded-2xl hover:bg-mist-100" size={58} color="#353131" onClick={() => navigate("/settings")}/>
     </div>
   );
 };
