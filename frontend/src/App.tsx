@@ -2,14 +2,16 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import Sidebar from './components/Layout/Sidebar'
 import Home from './views/Home'
+import Header from './components/Layout/Header'
 
 function App() {
 
   return (
     <BrowserRouter>
-      <div className='min-w-screen min-h-screen md:flex bg-gray-100 ' >
+      <div className='min-w-screen md:flex bg-mist-50 ' >
         <Sidebar/>
-        <div className="mt-24 md:mt-0 md:ml-24 md:w-full h-full">
+        <Header/>
+        <div className="mt-22 ml-22 md:w-full box-border overflow-y-scroll">
           <Routes>
             <Route path='/' element={<Home/>}/>
           </Routes>
