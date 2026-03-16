@@ -5,7 +5,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 const router  = express.Router()
 router.use(express.json())
 
-router.post('/userDetails',async(req,res)=>{
+router.get('/userDetails',async(req,res)=>{
     const userId = req.user?.userId
 
     try{
