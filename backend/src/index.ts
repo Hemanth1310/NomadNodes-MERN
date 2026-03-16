@@ -1,11 +1,9 @@
 import "dotenv/config";
 import express from "express";
-
+import authRouter from './AuthRoutes'
 const app = express();
 
-app.get("/health", (_request, response) => {
-	response.status(200).json({ status: "ok" });
-});
+app.use('/api/auth/', authRouter )
 
 const port = Number(process.env["PORT"]) || 3001;
 

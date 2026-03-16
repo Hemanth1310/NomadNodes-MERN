@@ -4,9 +4,9 @@ import { registerSchema } from './utils/typechecker'
 import { prisma } from './prisma'
 import * as bcrypt from "bcryptjs"
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-const app = express.Router()
+const router = express.Router()
 
-app.post('/register',async(req,res)=>{
+router.post('/register',async(req,res)=>{
     const result = registerSchema.safeParse(req.body as Prisma.UserCreateInput)
     if(!result.success){
         return res.status(400).json({errorMessage:"Invalid Inputs"})
@@ -41,3 +41,5 @@ app.post('/register',async(req,res)=>{
     }
     
 })
+
+export default router
