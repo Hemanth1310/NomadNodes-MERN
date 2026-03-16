@@ -87,7 +87,7 @@ router.get('/login',async(req,res)=>{
 
         const tokenPayload = {
             email:user.email,
-            userIdl: user.id
+            userId: user.id
         }
 
         const token = jwt.sign(tokenPayload, JWT_secret,  { expiresIn: "1hr" })
@@ -116,5 +116,6 @@ router.get('/login',async(req,res)=>{
         return res.status(500).json({ errorMessage: "Internal server error" });
     }
 })
+
 
 export default router
