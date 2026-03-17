@@ -46,8 +46,7 @@ router.post('/register',async(req,res)=>{
     
 })
 
-router.get('/login',async(req,res)=>{
-    const creds = req.body
+router.post('/login',async(req,res)=>{
     const results = loginDetailSchema.safeParse(req.body)
 
     if(!results.success){
@@ -72,17 +71,18 @@ router.get('/login',async(req,res)=>{
         })
 
         if(!user){
-            return res.status(401).json({errorMessage:'Invalid credentials'})
+            return res.status(401).json({errorMessage:'Invalid credentials: Email dosnt Exist'})
         }
         if(!user.isVerified){
             return res.status(405).json({ 
-                errorMessage: "Not Verified. Please verify and try again!" 
+                errorMessage: "User Not Verified. Please verify and try again!" 
             });
         }
         const passwordMatch = await bcrypt.compare(password, user.password)
 
         if(!passwordMatch){
-            return res.status(401).json({errorMessage:'Invalid credentials'})
+            console.log(password,user.password)
+            return res.status(401).json({errorMessage:'Invalid credentials: Incorrect Password'})
         }
 
         const tokenPayload = {
