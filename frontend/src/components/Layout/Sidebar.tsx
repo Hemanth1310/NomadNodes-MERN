@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { ImageUp, MapPinned, Settings } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContent";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const {userDetails} = useAuth()
+  const isLoggedIn = userDetails?true:false
   return (
     <div className="group w-22 hover:w-52 p-3 min-h-screen left-0 top-0 border-r border-r-mist-300 bg-mist-50 flex flex-col items-start gap-10 z-10 fixed transition-[width] duration-150 ease-in-out">
       <span className="w-full flex items-center justify-start gap-3 p-3 rounded-2xl hover:bg-mist-200">
@@ -16,6 +19,7 @@ const Sidebar = () => {
           NomadNodes
         </p>
       </span>
+      {isLoggedIn && <>
       <span className="w-full flex items-center justify-start gap-3 p-3 rounded-2xl hover:bg-mist-200">
         <ImageUp
           className="shrink-0"
@@ -38,6 +42,8 @@ const Sidebar = () => {
           Settings
         </p>
       </span>
+      </>}
+      
     </div>
   );
 };
