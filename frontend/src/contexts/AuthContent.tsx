@@ -36,6 +36,7 @@ const AuthContextProvider = ({children}:AuthContextProviderType)=>{
     const handleLogout = ()=>{
         setUserDetails(null)
         localStorage.removeItem("nomadToken")
+        setIsAuthLoading(false)
     }
 
     useEffect(()=>{
