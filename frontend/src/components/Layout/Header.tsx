@@ -1,20 +1,30 @@
 import { ChevronDown, ChevronUp, CircleUserRound, Search } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import AuthLayout from './AuthLayout'
 
 const Header = () => {
     const [searchInput, setSearchInput] = useState('')
     const [isDropDownOpen, setIsDropDownOpen] = useState(false)
     const [results, setResults] = useState(1)
     const [isSearchOpen, setIsSearchOpen] = useState(false)
+    const [isModalOpen,setIsModalOpen] = useState(false) 
     const containerRef = useRef<HTMLDivElement | null>(null)
     const inputRef = useRef<HTMLInputElement | null>(null)
     const dropDownContainerRef= useRef<HTMLDivElement | null>(null)
-    const isLoggedIn = true
+    const isLoggedIn = false
 
     const handleDropDown = () => {
         setResults(0)
         setIsDropDownOpen(prev => !prev)
 
+    }
+
+    const handleModalClose = ()=>{
+        setIsModalOpen(false)
+    }
+
+    const handleModalOpen = ()=>{
+        setIsModalOpen(true)
     }
 
     useEffect(() => {
@@ -79,12 +89,13 @@ const Header = () => {
                     </div>}
                         
                     </div>:<div>
-                        <button className='border border-mist-500 p-2 rounded-2xl' >Login</button>
+                        <button className='border-2 p-2 text-lg border-mist-800 rounded-2xl hover:bg-mist-200' onClick={handleModalOpen} >Login</button>
                     </div>}
                     
                    
                         
                 </div>
+                <AuthLayout isOpen={isModalOpen} onClose={handleModalClose}/>
         
     </div>
   )
