@@ -28,3 +28,5 @@ export const userDataSchema = z.object({
   imagePath: z.string(), // allows "" too
   isVerified: z.boolean(),
 });
+
+export type RegistrationData = z.infer<typeof registerSchema>
