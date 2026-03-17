@@ -91,11 +91,11 @@ router.post('/login',async(req,res)=>{
         }
 
         const token = jwt.sign(tokenPayload, JWT_secret,  { expiresIn: "1hr" })
-
+        const {password:pass,...ModUser} = user
         return res.status(200).json({
             message:'Login Successful',
             sessionToken:token,
-            payload:{...user}
+            payload:{...ModUser}
         })
     }catch(error){
         if(error instanceof PrismaClientKnownRequestError){
