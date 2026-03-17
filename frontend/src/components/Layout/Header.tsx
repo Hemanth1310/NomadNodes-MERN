@@ -1,6 +1,7 @@
-import { ChevronDown, ChevronUp, CircleUserRound, Search } from 'lucide-react'
+import { ChevronDown, ChevronUp, CircleUserRound, LogOutIcon, Search } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import AuthLayout from './AuthLayout'
+import { useAuth } from '@/contexts/AuthContent'
 
 const Header = () => {
     const [searchInput, setSearchInput] = useState('')
@@ -11,7 +12,8 @@ const Header = () => {
     const containerRef = useRef<HTMLDivElement | null>(null)
     const inputRef = useRef<HTMLInputElement | null>(null)
     const dropDownContainerRef= useRef<HTMLDivElement | null>(null)
-    const isLoggedIn = false
+    const {userDetails, handleLogout} = useAuth()
+    const isLoggedIn = userDetails?true:false
 
     const handleDropDown = () => {
         setResults(0)
@@ -80,11 +82,13 @@ const Header = () => {
                             <CircleUserRound size={40}/>
                             { !isDropDownOpen ? <ChevronDown/>:<ChevronUp />}
                         </div>
-                        {isDropDownOpen &&  <div className='absolute top-10 right-0 w-52 bg-mist-50 rounded-2xl shadow-lg p-3'>
-                            <ul>
-                                <li>Item1</li>
-                                 <li>Item1</li>
-                                  <li>Item1</li>
+                        {isDropDownOpen &&  <div className='absolute top-10 right-0 w-52 bg-mist-50 rounded-2xl shadow-lg p-5'>
+                            <p className='text-2xl '>Hello, {userDetails?.firstName}</p>
+                            <ul className='mt-3'>
+                                <li className='flex items-center gap-2 text-lg rounded-2xl p-3 hover:bg-mist-200' onClick={handleLogout}>
+                                    <LogOutIcon size={22}/>    
+                                    Logout
+                                </li>
                             </ul>
                     </div>}
                         
