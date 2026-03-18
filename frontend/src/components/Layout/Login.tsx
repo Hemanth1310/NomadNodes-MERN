@@ -40,7 +40,7 @@ const Login = ({handletoggle, onClose}: Props) => {
                 setErrors("Invalid Server Data, Please tryagain later!")
                 return
             }
-            localStorage.setItem('nomadToken',response.data.payload)
+            localStorage.setItem('nomadToken',response.data.sessionToken)
             handleLogin(response.data.payload)
             onClose()
             
