@@ -26,7 +26,7 @@ const authenticateToken = async (
   const token = authHeader?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ error: "Access Denied: No token provided." });
+    return res.status(401).json({ errorMessage: "Access Denied: No token provided." });
   }
 
   try {
@@ -35,7 +35,7 @@ const authenticateToken = async (
     console.log(decode);
     next();
   } catch (error) {
-    return res.status(403).json({ error: "Access Denied: Invalid or expired token." });
+    return res.status(403).json({ errorMessage: "Access Denied: Invalid or expired token." });
   }
 };
 
