@@ -54,7 +54,7 @@ const Header = () => {
         return () => window.removeEventListener('mousedown', handleMouseDown)
     }, [])
     return (
-        <div className='fixed left-22 right-0 top-0 h-22 p-3 flex items-center gap-4'>
+        <div className='fixed left-22 right-0 top-0 h-22 p-3 flex items-center gap-4 bg-mist-50'>
                 <div ref={containerRef} className='h-full w-full relative'>
                     <div className='h-full w-full rounded-2xl bg-mist-200 p-3 flex'>
                                 <input
