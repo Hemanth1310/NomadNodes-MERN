@@ -3,6 +3,7 @@ import express from "express";
 import authRouter from './AuthRoutes'
 import protectedRoutes from './protectedRoutes'
 import authenticateToken from "./Middleware/authMiddleware";
+import publicRoutes from './publicRoute'
 import cors from 'cors'
 import path from 'path'
 const app = express();
@@ -23,6 +24,7 @@ app.use(
 
 app.use('/api/auth/', authRouter )
 app.use('/api/protectedRoutes/',authenticateToken, protectedRoutes)
+app.use('/api/publucRoutes/', publicRoutes)
 
 const publicPath = path.join(__dirname,'..','public')
 app.use('/images',express.static('public'))

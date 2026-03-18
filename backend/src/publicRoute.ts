@@ -18,3 +18,5 @@ router.get('/allNodes',async(req,res)=>{
     }
 })
 
+
+export default router
