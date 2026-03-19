@@ -77,6 +77,11 @@ const Header = () => {
                                             setIsSearchOpen(false)
                                         }
                                     }}
+                                    onKeyDown={(e)=>{
+                                        if(e.key==="Enter" && searchInput.trim().length>0){
+                                            handleNavigation(searchInput)
+                                        }
+                                    }}
                                 />
                         <Search size={40} color='#67787c'/>
                     </div>
