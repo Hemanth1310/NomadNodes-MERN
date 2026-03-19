@@ -7,7 +7,7 @@ export type UserData={
     isVerified: boolean;
 }
 
-type tag =  "View" | "Experience" | "Food"
+export type Tag =  "View" | "Experience" | "Food"
 
 export type Nodes={
     id: string;
@@ -17,6 +17,6 @@ export type Nodes={
     imageUrl: string;
     content: string;
     visitDate: Date;
-    tags: tag[];
+    tags: Tag[];
     userId: string;
 }
