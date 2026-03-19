@@ -15,7 +15,7 @@ const Home = () => {
         const tags = searchParams.getAll('tag') as Tag[]
         const searchFilter = searchStr.replaceAll("-","").toLowerCase()
         return data?.filter((node)=>{
-            const matchSearch = node.title.toLowerCase().replaceAll(" ","").includes(searchFilter)
+            const matchSearch = node.title.toLowerCase().replaceAll(" ","").includes(searchFilter) || node.tags.toString().toLowerCase().includes(searchFilter)
             const matchTags = tags.length === 0 || tags.some(t=>node.tags.includes(t))
             return matchSearch && matchTags
         }) ?? []
