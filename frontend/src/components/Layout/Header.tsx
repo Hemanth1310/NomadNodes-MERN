@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import AuthLayout from './AuthLayout'
 import { useAuth } from '@/contexts/AuthContent'
 import useTitles from '@/lib/titlesDataProvider'
+import { useNavigate } from 'react-router'
 
 const Header = () => {
     const [searchInput, setSearchInput] = useState('')
@@ -13,6 +14,7 @@ const Header = () => {
     const containerRef = useRef<HTMLDivElement | null>(null)
     const inputRef = useRef<HTMLInputElement | null>(null)
     const dropDownContainerRef= useRef<HTMLDivElement | null>(null)
+    const navigate = useNavigate()
     const {userDetails, handleLogout} = useAuth()
     const titles = useTitles()
     const isLoggedIn = userDetails?true:false
@@ -54,6 +56,12 @@ const Header = () => {
         window.addEventListener('mousedown', handleMouseDown)
         return () => window.removeEventListener('mousedown', handleMouseDown)
     }, [])
+
+    const handleNavigation=(item:string)=>{
+        const modsearch = item.replaceAll(" ","-")
+        setIsSearchOpen(false)
+        navigate(`?search=${modsearch}`)
+    }
     return (
         <div className='fixed left-22 right-0 top-0 h-22 p-3 flex items-center gap-4 bg-mist-50'>
                 <div ref={containerRef} className='h-full w-full relative'>
@@ -72,8 +80,13 @@ const Header = () => {
                                 />
                         <Search size={40} color='#67787c'/>
                     </div>
-                    {isSearchOpen && <div className='bg-mist-200 rounded-2xl p-8 mt-3'>
-                        {results.length>0?<p>{results.map(item=><span>{item}</span>)}</p>:
+                    {isSearchOpen && <div className='bg-mist-200 rounded-2xl p-5 mt-3'>
+                        {results.length>0?<div>{results.map(item=>
+                            <p onClick={()=>handleNavigation(item)} className='w-full p-3 rounded-2xl flex items-center gap-2 cursor-pointer text-xl hover:bg-mist-50 text-mist-800'>
+                                 <Search size={20} color='#22292b'/>
+                                {item}
+                            </p>
+                        )}</div>:
                         <p>No Results to show</p>}
                         
                     </div>}
