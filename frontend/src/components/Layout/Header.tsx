@@ -60,7 +60,12 @@ const Header = () => {
     const handleNavigation=(item:string)=>{
         const modsearch = item.replaceAll(" ","-")
         setIsSearchOpen(false)
-        navigate(`?search=${modsearch}`)
+        if(modsearch.length<=0){
+             navigate('/')
+        }else{
+            navigate(`?search=${modsearch}`)
+        }
+       
     }
     return (
         <div className='fixed left-22 right-0 top-0 h-22 p-3 flex items-center gap-4 bg-mist-50'>
@@ -78,7 +83,7 @@ const Header = () => {
                                         }
                                     }}
                                     onKeyDown={(e)=>{
-                                        if(e.key==="Enter" && searchInput.trim().length>0){
+                                        if(e.key==="Enter"){
                                             handleNavigation(searchInput)
                                         }
                                     }}
