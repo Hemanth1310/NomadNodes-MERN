@@ -11,11 +11,11 @@ const Home = () => {
     const {data , isLoading, isError, refetch, error} = useNodes()
     const [searchParams] = useSearchParams()
     const filteredNodes = useMemo(()=>{
-        const search = searchParams.get('search') || ''
+        const searchStr : string = searchParams.get('search') || ''
         const tags = searchParams.getAll('tag') as Tag[]
-
+        const searchFilter = searchStr.replaceAll("-","").toLowerCase()
         return data?.filter((node)=>{
-            const matchSearch = node.title.toLowerCase().includes(search.toLowerCase())
+            const matchSearch = node.title.toLowerCase().replaceAll(" ","").includes(searchFilter)
             const matchTags = tags.length === 0 || tags.some(t=>node.tags.includes(t))
             return matchSearch && matchTags
         }) ?? []
