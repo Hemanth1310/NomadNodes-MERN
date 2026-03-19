@@ -2,23 +2,23 @@ import { ChevronDown, ChevronUp, CircleUserRound, LogOutIcon, Search } from 'luc
 import { useEffect, useRef, useState } from 'react'
 import AuthLayout from './AuthLayout'
 import { useAuth } from '@/contexts/AuthContent'
+import useTitles from '@/lib/titlesDataProvider'
 
 const Header = () => {
     const [searchInput, setSearchInput] = useState('')
     const [isDropDownOpen, setIsDropDownOpen] = useState(false)
-    const [results, setResults] = useState(1)
+    const [results, setResults] = useState<string[]>([])
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     const [isModalOpen,setIsModalOpen] = useState(false) 
     const containerRef = useRef<HTMLDivElement | null>(null)
     const inputRef = useRef<HTMLInputElement | null>(null)
     const dropDownContainerRef= useRef<HTMLDivElement | null>(null)
     const {userDetails, handleLogout} = useAuth()
+    const titles = useTitles()
     const isLoggedIn = userDetails?true:false
 
     const handleDropDown = () => {
-        setResults(0)
         setIsDropDownOpen(prev => !prev)
-
     }
 
     const handleModalClose = ()=>{
@@ -32,12 +32,13 @@ const Header = () => {
     useEffect(() => {
         if (searchInput.length > 3) {
             const timeoutId = setTimeout(() => {
-                setResults(3)
+                const filteredTitle = titles?.filter(title=>title.toLowerCase().replaceAll(" ","").includes(searchInput.toLowerCase().replaceAll(" ",""))) ??[]
+                setResults(filteredTitle)
                 setIsSearchOpen(true)
             }, 300)
             return () => clearTimeout(timeoutId)
         }
-    }, [searchInput])
+    }, [searchInput,titles])
 
     useEffect(() => {
         const handleMouseDown = (event: MouseEvent) => {
@@ -71,8 +72,10 @@ const Header = () => {
                                 />
                         <Search size={40} color='#67787c'/>
                     </div>
-                    {isSearchOpen && <div className='bg-red-500 rounded-2xl p-3 mt-3'>
-                        <p>No Results to show</p> {results}
+                    {isSearchOpen && <div className='bg-mist-200 rounded-2xl p-8 mt-3'>
+                        {results.length>0?<p>{results.map(item=><span>{item}</span>)}</p>:
+                        <p>No Results to show</p>}
+                        
                     </div>}
                 </div>
                 <div ref={dropDownContainerRef} className='w-24 h-full flex flex-col items-center justify-center box-border'>
