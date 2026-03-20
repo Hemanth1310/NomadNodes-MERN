@@ -31,7 +31,6 @@ const Login = ({handletoggle, onClose}: Props) => {
             setErrors(results.error.issues[0].message)
             return
         }
-        console.log(results.data)
 
         try{
             const response = await api.post(`${baseUrl}/api/auth/login`,results.data)
