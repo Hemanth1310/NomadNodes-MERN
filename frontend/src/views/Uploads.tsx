@@ -72,7 +72,7 @@ const Uploads = () => {
           ))}
           
         </div>
-        <p>Total size is {totalSize}mb</p>
+        {totalSize && <p>Total size is {totalSize}mb</p>}
           <button disabled={isUploading} type='submit' className='text-xl pr-15 pl-15 p-2 bg-mist-800 text-white text-center rounded-2xl disabled:bg-mist-300'>Submit</button>
         </form>
 
