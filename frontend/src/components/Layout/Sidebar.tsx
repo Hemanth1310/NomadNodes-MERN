@@ -25,7 +25,7 @@ const Sidebar = () => {
           className="shrink-0"
           size={40}
           color="#353131"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/uploads")}
         />
         <p className="whitespace-nowrap hidden opacity-0 translate-x-2 transition-all duration-150 group-hover:block group-hover:opacity-200 group-hover:translate-x-0">
           Upload
