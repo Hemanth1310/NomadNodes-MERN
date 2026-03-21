@@ -5,8 +5,6 @@ import axios from 'axios'
 import { MapPinned } from 'lucide-react'
 import React, { useState } from 'react'
 
-const  baseUrl = import.meta.env.VITE_API_URL
-
 type Props = {
     handletoggle:(moveTo:string)=>void
     onClose:()=>void
@@ -33,7 +31,7 @@ const Login = ({handletoggle, onClose}: Props) => {
         }
 
         try{
-            const response = await api.post(`${baseUrl}/api/auth/login`,results.data)
+            const response = await api.post('/api/auth/login',results.data)
             const parsedUserData  = userDataSchema.safeParse(response.data.payload)
             if(!parsedUserData.success){
                 setErrors("Invalid Server Data, Please tryagain later!")

@@ -10,7 +10,6 @@ type Props = {
   onClose: ()=>void
 };
 
-const baseUrl = import.meta.env.VITE_API_URL
 const Registration = ({ handletoggle ,onClose}: Props) => {
     const [errors,setErrors] = useState({
         email: '',
@@ -33,7 +32,7 @@ const Registration = ({ handletoggle ,onClose}: Props) => {
         }
 
         try{
-            await api.post(`${baseUrl}/api/auth/register`,parsedData.data)
+            await api.post('/api/auth/register',parsedData.data)
             setIsSuccess(true)
             setTimeout(()=>{
                 navigate('/')

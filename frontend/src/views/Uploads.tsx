@@ -5,7 +5,14 @@ const Uploads = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [previews, setPreviews] = useState<string[]>([]);
   const [totalSize, setTotalSize] = useState(0);
-
+  const [errors,setErrors] = useState({
+    title:   '',
+    coordinates: '',
+    content:'',
+    visitDate:'',       // validates "YYYY-MM-DD" string
+    tags:'',
+    imageURL:''    
+  })
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     setIsUploading(true);
     console.log(e.target.files);
@@ -38,7 +45,7 @@ const Uploads = () => {
       </h1>
       <div className="flex h-full">
         <form
-          className="w-full h-full flex flex-col gap-5  items-center rounded-2xl"
+          className="flex-1 w-full h-full flex flex-col gap-5  items-center rounded-2xl"
           onSubmit={handleSubmit}
         >
           <label
@@ -83,6 +90,58 @@ const Uploads = () => {
           >
             Submit
           </button>
+        </form>
+        <form className="flex-1 flex flex-col w-full items-center gap-5 pr-5 pl-5">
+          <div className="w-full">
+            <input
+              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
+              name="title"
+              type="text"
+              placeholder="Enter title"
+            />
+            {errors.title && (
+              <div className="text-sm font-light text-red-800 pl-2">{errors.email}</div>
+            )}
+            </div>
+            <div className="w-full">
+            <input
+              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
+              name="coordinates"
+              type="text"
+              placeholder="Enter coordinates"
+            />
+            {errors.coordinates && (
+              <div className="text-sm font-light text-red-800 pl-2">{errors.email}</div>
+            )}
+            </div>
+            <div className="w-full">
+            <input
+              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
+              name="content"
+              type="text"
+              placeholder="Enter content"
+            />
+            {errors.content && (
+              <div className="text-sm font-light text-red-800 pl-2">{errors.email}</div>
+            )}
+            </div>
+            <div className="w-full">
+            <input
+              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
+              name="visitDate"
+              type="date"
+              placeholder="Enter visitDate"
+            />
+            {errors.visitDate && (
+              <div className="text-sm font-light text-red-800 pl-2">{errors.email}</div>
+            )}
+            </div>
+            
+          <button
+            disabled={isUploading}
+            type="submit"
+            className="text-xl pr-15 pl-15 p-2 bg-mist-800 text-white text-center rounded-2xl disabled:bg-gray-400 hover:bg-gray-400"
+          >Submit</button>
         </form>
       </div>
     </div>
