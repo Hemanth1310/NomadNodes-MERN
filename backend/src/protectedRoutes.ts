@@ -98,7 +98,7 @@ router.get("/userDetails", async (req, res) => {
     });
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code === "2025") {
+      if (error.code === "P2025") {
         return res.status(401).json({ errorMessage: "User not found." });
       }
     }
