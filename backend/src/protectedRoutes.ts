@@ -27,14 +27,15 @@ const upload = multer({ storage: storage });
 router.post("/nodePost", upload.single("image"), async (req, res) => {
   const userId = req.user?.userId;
   if (!userId) return res.status(401).json({ errorMessage: "Unauthorized" });
-
   // 2. File guard
-  if (!req.file)
+  if (!req.file) {
     return res.status(400).json({ errorMessage: "File not found." });
+  }
 
   // 3. Zod validate body
   const parsed = nodePostSchema.safeParse(req.body);
   if (!parsed.success) {
+    console.log("Flag12");
     return res
       .status(400)
       .json({ errorMessage: parsed.error.issues[0].message });
@@ -59,7 +60,9 @@ router.post("/nodePost", upload.single("image"), async (req, res) => {
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === "2002") {
-        return res.status(401).json({ errorMessage: "Unable to porcess request." });
+        return res
+          .status(401)
+          .json({ errorMessage: "Unable to porcess request." });
       }
     }
     console.error("Unexpected Error:", error);
@@ -96,9 +99,7 @@ router.get("/userDetails", async (req, res) => {
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === "2025") {
-        return res
-          .status(401)
-          .json({ errorMessage: "User not found." });
+        return res.status(401).json({ errorMessage: "User not found." });
       }
     }
     console.error("Unexpected Error:", error);
