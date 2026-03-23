@@ -100,6 +100,7 @@ const Uploads = () => {
     setIsUploading(false)
     setFileDetails(defaultDetails)
     setPreviews([])
+    setTotalSize(0)
     setFileList(null)
   };
   return (
