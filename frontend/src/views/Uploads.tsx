@@ -76,7 +76,7 @@ const Uploads = () => {
 
     for (const [name, value] of Object.entries(nodeDetailsParsed.data)) {
       if (Array.isArray(value)) {
-        formData.append(name, value.toString());
+        formData.append(name, JSON.stringify(value));
       } else {
         formData.append(name, value);
       }
@@ -84,7 +84,7 @@ const Uploads = () => {
 
     formData.append("images", fileList[0]);
 
-    console.log(formData);
+    console.log([...formData.values()]);
   };
   return (
     <div className="w-full h-full pt-5 flex flex-col sm:pl-10 sm:pr-10">
