@@ -1,4 +1,6 @@
+import api from "@/lib/axiosConfig";
 import { nodePostSchema, type NodeType, type Tag } from "@/lib/typechecker";
+import axios from "axios";
 import React, { useState, type ChangeEvent } from "react";
 
 const Uploads = () => {
@@ -21,6 +23,7 @@ const Uploads = () => {
     visitDate: "", // validates "YYYY-MM-DD" string
     tags: "",
     imagesURL: "",
+    uploadReq:""
   });
   const tagOptions = ["View", "Experience", "Food"];
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +60,7 @@ const Uploads = () => {
     }
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
     const nodeDetailsParsed = nodePostSchema.safeParse(fileDetails);
@@ -82,7 +85,16 @@ const Uploads = () => {
       }
     }
 
-    formData.append("images", fileList[0]);
+    formData.append("image", fileList[0]);
+
+    try{
+      await api.post('/api/protectedRoutes/nodePost', formData)
+      console.log("Upload done")
+    }catch(err){
+      if(axios.isAxiosError(err)){
+        setErrors(prev=>({...prev,uploadReq:"Failed to Upload, Please try later."}))
+      }
+    }
 
     console.log([...formData.values()]);
   };
@@ -98,14 +110,13 @@ const Uploads = () => {
       >
         <div className="flex-1 w-full h-full flex flex-col gap-5  items-center rounded-2xl">
           <label
-            htmlFor="images"
+            htmlFor="image"
             className="flex flex-col w-full h-full items-center justify-center border-2 border-dashed border-orange-300 rounded-lg bg-white hover:bg-gray-50 transition-colors cursor-pointer p-4"
           >
             <input
-              id="images"
-              name="images"
+              id="image"
+              name="image"
               type="file"
-              multiple
               accept="image/*"
               onChange={handleFile}
               disabled={isUploading}
@@ -215,11 +226,15 @@ const Uploads = () => {
             </select>
             {errors.tags && (
               <div className="text-sm font-light text-red-800 pl-2">
-                {errors.visitDate}
+                {errors.tags}
               </div>
             )}
           </div>
-
+             {errors.uploadReq && (
+              <div className="text-sm font-light text-red-800 pl-2">
+                {errors.uploadReq}
+              </div>
+            )}
           <button
             disabled={isUploading}
             type="submit"
