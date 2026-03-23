@@ -35,11 +35,11 @@ export const userDataSchema = z.object({
 export type RegistrationData = z.infer<typeof registerSchema>
 
 export const nodePostSchema = z.object({
-  title:       z.string().min(1),
-  coordinates: z.string().min(1),
-  content:     z.string().min(1),
-  visitDate:   z.string().date(),          // validates "YYYY-MM-DD" string
-  tags:        z.string()                  // comes as JSON string e.g. '["View","Food"]'
-                 .transform((val) => JSON.parse(val))
-                 .pipe(z.array(tagSchema)),
+  title:       z.string().min(1,"Title cannot be empty"),
+  coordinates: z.string().min(1,"Coordinates cannot be empty"),
+  content:     z.string().min(1,"Name cannot be empty"),
+  visitDate:   z.string().min(1,"Date cannot be empty"),          // validates "YYYY-MM-DD" string
+  tags:        z.array(tagSchema).min(1,"Select atleast one tag"),
 })
+
+export type NodeType = z.infer<typeof nodePostSchema>

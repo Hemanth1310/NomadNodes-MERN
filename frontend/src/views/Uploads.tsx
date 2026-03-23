@@ -1,21 +1,30 @@
+import { nodePostSchema, type NodeType, type Tag } from "@/lib/typechecker";
 import React, { useState, type ChangeEvent } from "react";
 
 const Uploads = () => {
   const [fileList, setFileList] = useState<FileList | null>();
+  const [fileDetails, setFileDetails] = useState<NodeType>({
+    title: "",
+    coordinates: "",
+    content: "",
+    visitDate: "",
+    tags: [],
+  });
   const [isUploading, setIsUploading] = useState(false);
   const [previews, setPreviews] = useState<string[]>([]);
   const [totalSize, setTotalSize] = useState(0);
-  const [errors,setErrors] = useState({
-    title:   '',
-    coordinates: '',
-    content:'',
-    visitDate:'',       // validates "YYYY-MM-DD" string
-    tags:'',
-    imageURL:''    
-  })
+
+  const [errors, setErrors] = useState({
+    title: "",
+    coordinates: "",
+    content: "",
+    visitDate: "", // validates "YYYY-MM-DD" string
+    tags: "",
+    imagesURL: "",
+  });
+  const tagOptions = ["View", "Experience", "Food"];
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     setIsUploading(true);
-    console.log(e.target.files);
     const files = e.target.files;
     const urls: string[] = [];
     let totalBytes = 0;
@@ -32,10 +41,50 @@ const Uploads = () => {
     setIsUploading(false);
   };
 
+  const handleDetails = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    if (e.target.name === "tags") {
+      const selectElement = e.target as HTMLSelectElement;
+      const newValue = Array.from(
+        selectElement.selectedOptions,
+        (option) => option.value as Tag,
+      );
+      setFileDetails((prev) => ({ ...prev, tags: [...newValue] }));
+    } else {
+      const { name, value } = e.target;
+      setFileDetails((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
-    console.log(fileList);
+    const nodeDetailsParsed = nodePostSchema.safeParse(fileDetails);
+    if (!fileList) {
+      setErrors((prev) => ({ ...prev, imagesURL: "Please Upload a image" }));
+      return;
+    }
+    if (!nodeDetailsParsed.success) {
+      for (const issue of nodeDetailsParsed.error.issues) {
+        setErrors((prev) => ({ ...prev, [issue.path[0]]: issue.message }));
+      }
+      return;
+    }
+
+    const formData = new FormData();
+
+    for (const [name, value] of Object.entries(nodeDetailsParsed.data)) {
+      if (Array.isArray(value)) {
+        formData.append(name, value.toString());
+      } else {
+        formData.append(name, value);
+      }
+    }
+
+    formData.append("images", fileList[0]);
+
+    console.log(formData);
   };
   return (
     <div className="w-full h-full pt-5 flex flex-col sm:pl-10 sm:pr-10">
@@ -43,14 +92,14 @@ const Uploads = () => {
       <h1 className="text-2xl sm:text-4xl mb-5 sm:mb-10">
         Upload your Nomadic post here
       </h1>
-      <div className="flex h-full">
-        <form
-          className="flex-1 w-full h-full flex flex-col gap-5  items-center rounded-2xl"
-          onSubmit={handleSubmit}
-        >
+      <form
+        onSubmit={handleSubmit}
+        className="flex w-full items-center gap-5 pr-5 pl-5"
+      >
+        <div className="flex-1 w-full h-full flex flex-col gap-5  items-center rounded-2xl">
           <label
             htmlFor="images"
-            className="flex flex-col w-full h-1/2 items-center justify-center border-2 border-dashed border-orange-300 rounded-lg bg-white hover:bg-gray-50 transition-colors cursor-pointer p-4"
+            className="flex flex-col w-full h-full items-center justify-center border-2 border-dashed border-orange-300 rounded-lg bg-white hover:bg-gray-50 transition-colors cursor-pointer p-4"
           >
             <input
               id="images"
@@ -83,6 +132,94 @@ const Uploads = () => {
               Total size is <b>{totalSize} mb</b>.
             </p>
           )}
+          {errors.imagesURL && (
+            <div className="text-sm font-light text-red-800 pl-2">
+              {errors.imagesURL}
+            </div>
+          )}
+        </div>
+        <div className="flex-1 flex flex-col gap-5">
+          <div className=" w-full">
+            <input
+              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
+              name="title"
+              type="text"
+              placeholder="Enter title"
+              value={fileDetails.title}
+              onChange={handleDetails}
+            />
+            {errors.title && (
+              <div className="text-sm font-light text-red-800 pl-2">
+                {errors.title}
+              </div>
+            )}
+          </div>
+          <div className="w-full">
+            <input
+              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
+              name="coordinates"
+              type="text"
+              placeholder="Enter coordinates"
+              value={fileDetails.coordinates}
+              onChange={handleDetails}
+            />
+            {errors.coordinates && (
+              <div className="text-sm font-light text-red-800 pl-2">
+                {errors.coordinates}
+              </div>
+            )}
+          </div>
+          <div className="w-full">
+            <input
+              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
+              name="content"
+              type="text"
+              placeholder="Enter content"
+              value={fileDetails.content}
+              onChange={handleDetails}
+            />
+            {errors.content && (
+              <div className="text-sm font-light text-red-800 pl-2">
+                {errors.content}
+              </div>
+            )}
+          </div>
+          <div className="w-full">
+            <input
+              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
+              name="visitDate"
+              type="date"
+              placeholder="Enter visitDate"
+              value={fileDetails.visitDate}
+              onChange={handleDetails}
+            />
+            {errors.visitDate && (
+              <div className="text-sm font-light text-red-800 pl-2">
+                {errors.visitDate}
+              </div>
+            )}
+          </div>
+          <div className="w-full">
+            <select
+              multiple
+              className="w-full h-40 p-3 text-base border-2 border-mist-800 rounded-2xl bg-white text-mist-900 shadow-sm outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 transition "
+              name="tags"
+              value={fileDetails.tags}
+              onChange={handleDetails}
+            >
+              {tagOptions.map((opt) => (
+                <option className="p-2 rounded-md" value={opt} key={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+            {errors.tags && (
+              <div className="text-sm font-light text-red-800 pl-2">
+                {errors.visitDate}
+              </div>
+            )}
+          </div>
+
           <button
             disabled={isUploading}
             type="submit"
@@ -90,60 +227,8 @@ const Uploads = () => {
           >
             Submit
           </button>
-        </form>
-        <form className="flex-1 flex flex-col w-full items-center gap-5 pr-5 pl-5">
-          <div className="w-full">
-            <input
-              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
-              name="title"
-              type="text"
-              placeholder="Enter title"
-            />
-            {errors.title && (
-              <div className="text-sm font-light text-red-800 pl-2">{errors.email}</div>
-            )}
-            </div>
-            <div className="w-full">
-            <input
-              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
-              name="coordinates"
-              type="text"
-              placeholder="Enter coordinates"
-            />
-            {errors.coordinates && (
-              <div className="text-sm font-light text-red-800 pl-2">{errors.email}</div>
-            )}
-            </div>
-            <div className="w-full">
-            <input
-              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
-              name="content"
-              type="text"
-              placeholder="Enter content"
-            />
-            {errors.content && (
-              <div className="text-sm font-light text-red-800 pl-2">{errors.email}</div>
-            )}
-            </div>
-            <div className="w-full">
-            <input
-              className="w-full  p-2 text-lg border-2 border-mist-800 rounded-2xl"
-              name="visitDate"
-              type="date"
-              placeholder="Enter visitDate"
-            />
-            {errors.visitDate && (
-              <div className="text-sm font-light text-red-800 pl-2">{errors.email}</div>
-            )}
-            </div>
-            
-          <button
-            disabled={isUploading}
-            type="submit"
-            className="text-xl pr-15 pl-15 p-2 bg-mist-800 text-white text-center rounded-2xl disabled:bg-gray-400 hover:bg-gray-400"
-          >Submit</button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 };
