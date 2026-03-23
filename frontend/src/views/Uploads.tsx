@@ -2,16 +2,17 @@ import api from "@/lib/axiosConfig";
 import { nodePostSchema, type NodeType, type Tag } from "@/lib/typechecker";
 import axios from "axios";
 import React, { useState, type ChangeEvent } from "react";
-
-const Uploads = () => {
-  const [fileList, setFileList] = useState<FileList | null>();
-  const [fileDetails, setFileDetails] = useState<NodeType>({
+ import { ToastContainer, toast } from 'react-toastify';
+const defaultDetails ={
     title: "",
     coordinates: "",
     content: "",
     visitDate: "",
     tags: [],
-  });
+  }
+const Uploads = () => {
+  const [fileList, setFileList] = useState<FileList | null>(null);
+  const [fileDetails, setFileDetails] = useState<NodeType>(defaultDetails);
   const [isUploading, setIsUploading] = useState(false);
   const [previews, setPreviews] = useState<string[]>([]);
   const [totalSize, setTotalSize] = useState(0);
@@ -89,14 +90,17 @@ const Uploads = () => {
 
     try{
       await api.post('/api/protectedRoutes/nodePost', formData)
-      console.log("Upload done")
+      toast("Upload Done!")
     }catch(err){
       if(axios.isAxiosError(err)){
         setErrors(prev=>({...prev,uploadReq:"Failed to Upload, Please try later."}))
       }
     }
 
-    console.log([...formData.values()]);
+    setIsUploading(false)
+    setFileDetails(defaultDetails)
+    setPreviews([])
+    setFileList(null)
   };
   return (
     <div className="w-full h-full pt-5 flex flex-col sm:pl-10 sm:pr-10">
@@ -244,6 +248,7 @@ const Uploads = () => {
           </button>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };
